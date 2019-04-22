@@ -24,7 +24,7 @@ public class LoginServiceImpl implements ILoginService {
 	}
 
 	@Override
-	public String getPassword(String username) {
+	public UserEntity queryUser(String username) {
 		UserEntityExample example = new UserEntityExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUserNameEqualTo(username);
@@ -33,7 +33,7 @@ public class LoginServiceImpl implements ILoginService {
 		if(list == null || list.isEmpty()) {
 			return null;
 		}
-		return list.get(0).getPassword();
+		return list.get(0);
 	}
 
 }

@@ -16,7 +16,9 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xfrj.base.utils.DataConverUtil;
+import com.xfrj.user.model.UserEntity;
 import com.xfrj.user.service.ILoginService;
 
 // 实现AuthorizingRealm接口用户用户认证
@@ -55,14 +57,16 @@ public class UserRealm extends AuthorizingRealm {
         System.out.println("————身份认证方法————");
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         // 从数据库获取对应用户名密码的用户
-        String password = loginService.getPassword(token.getUsername());
-        if (null == password) {
+        UserEntity user = loginService.queryUser(token.getUsername());
+        if (null == user) {
             throw new AccountException("用户名不正确");
         } 
-        if (!password.equals(DataConverUtil.char2String(token.getCredentials()))) {
+        if (!user.getPassword().equals(DataConverUtil.char2String(token.getCredentials()))) {
             throw new AccountException("密码不正确");
         }
-        return new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(token.getPrincipal(), user, getName());
+        System.out.println(JSONObject.toJSON(info));
+        return info;
     }
 
 }

@@ -47,21 +47,25 @@ public class ShiroConfiguration {
 		return shiroFilterFactoryBean;
 	}
 
+	/**
+	 * @description 配置访问拦截器 
+	 * @author mutisitic
+	 * @return
+	 */
 	private Map<String, String> filterMap() {
 		// 设置拦截器
 		Map<String, String> filterRuleMap = new LinkedHashMap<>();
+		 // 访问 /unauthorized/** 不通过JWTFilter
+	    filterRuleMap.put("/unauthorized/**", "anon");
 		// 用户，需要角色权限 “user”
 		filterRuleMap.put("/user/**", "roles[user]");
 		// 管理员，需要角色权限 “admin”
 		filterRuleMap.put("/sys/**", "roles[sys]");
-		
 		// 游客，开发权限
 		filterRuleMap.put("/guest/**", "anon");
 		// 开放登陆接口
-		filterRuleMap.put("/login", "anon");
-		 // 访问 /unauthorized/** 不通过JWTFilter
-	    filterRuleMap.put("/unauthorized/**", "anon");
-
+		filterRuleMap.put("/app.login", "anon");
+		
 		// 其余接口一律拦截
 		// 主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
 		filterRuleMap.put("/**", "authc");

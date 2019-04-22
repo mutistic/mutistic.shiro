@@ -4,7 +4,7 @@ package com.xfrj.user.controller;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.http.HttpStatus;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +20,7 @@ public class LoginController extends BaseController{
 	 * @param username 用户名
 	 * @param password 密码
 	 */
-	@PostMapping("/login")
+	@PostMapping("/app.login")
 	public Object login(@RequestBody UserEntity entity) {
 		// 从SecurityUtils里边创建一个 subject
 		Subject subject = SecurityUtils.getSubject();
@@ -28,16 +28,18 @@ public class LoginController extends BaseController{
 		UsernamePasswordToken token = new UsernamePasswordToken(entity.getUserName(), entity.getPassword());
 		// 执行认证登陆
 		subject.login(token);
+		ModelMap model = success(null, "APP登录成功");
+		model.put("token", "token");
+		return model;
 		
 		// 根据权限，指定返回数据
-		String role = "user";
-		if ("user".equals(role)) {
-			return message("登录成功！", HttpStatus.OK);
-		}
-		if ("admin".equals(role)) {
-			return  message("欢迎来到管理员页面", HttpStatus.OK);
-		}
-		
-		return warn("您没有访问权限！");
+//		String role = "user";
+//		if ("user".equals(role)) {
+//			ModelMap model = success(null, "APP登录成功");
+//			model.put("token", "token");
+//			return model;
+//		}
+//		
+//		return warn("您没有访问权限！");
 	}
 }
