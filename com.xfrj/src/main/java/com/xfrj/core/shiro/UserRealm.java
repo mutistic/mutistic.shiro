@@ -1,7 +1,4 @@
-package com.xfrj.base.config;
-
-import java.util.HashSet;
-import java.util.Set;
+package com.xfrj.core.shiro;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AccountException;
@@ -17,30 +14,30 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSONObject;
-import com.xfrj.base.utils.DataConverUtil;
+import com.xfrj.core.contants.AuthorizationContant;
+import com.xfrj.core.utils.DataConverUtil;
 import com.xfrj.user.model.UserEntity;
 import com.xfrj.user.service.ILoginService;
 
-// 实现AuthorizingRealm接口用户用户认证
+/**
+ * Shiro 用户认证规则
+ */
 public class UserRealm extends AuthorizingRealm {
 
 	@Autowired
 	private ILoginService loginService;
 	
-	// 获取授权信息
+	/**
+	 * 获取用户权限
+	 * @param principals
+	 * @return
+	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		System.out.println("————权限认证————");
-        String username = (String) SecurityUtils.getSubject().getPrincipal();
-        
+		SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        
-        Set<String> set = new HashSet<>();
-        set.add("user");
-        set.add("sys");
-//        String role = loginService.getRole(username);    //获得该用户角色
-//        set.add(role);  //需要将 role 封装到 Set 作为 info.setRoles() 的参数
-        info.setRoles(set);  //设置该用户拥有的角色
+        info.setRoles(AuthorizationContant.AUTHOR_SYS_SET);  //设置该用户拥有的角色
         return info;
 	}
 
@@ -64,9 +61,18 @@ public class UserRealm extends AuthorizingRealm {
         if (!user.getPassword().equals(DataConverUtil.char2String(token.getCredentials()))) {
             throw new AccountException("密码不正确");
         }
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(token.getPrincipal(), user, getName());
+        
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(toUserSession(user), user.getPassword(), getName());
         System.out.println(JSONObject.toJSON(info));
         return info;
     }
 
+    private UserSession toUserSession(UserEntity user) {
+    	UserSession session = new UserSession();
+    	session.setId(user.getId());
+    	session.setUserName(user.getUserName());
+    	session.setToken("token");
+    	return session;
+    }
+    
 }

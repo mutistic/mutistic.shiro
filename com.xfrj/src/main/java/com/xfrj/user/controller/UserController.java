@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.xfrj.base.controller.BaseController;
+import com.xfrj.core.controller.BaseController;
 
 @RestController
 @RequestMapping("/user")

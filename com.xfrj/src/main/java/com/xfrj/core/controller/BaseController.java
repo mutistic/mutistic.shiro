@@ -1,17 +1,16 @@
-package com.xfrj.base.controller;
+package com.xfrj.core.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.ModelMap;
 
-import com.xfrj.base.utils.ResponseUtil;
+import com.xfrj.core.utils.ResponseUtil;
 
 public class BaseController {
 
 	private static final Logger log = LoggerFactory.getLogger(BaseController.class);
 
-	// httpstatus https://www.cnblogs.com/DeasonGuan/articles/Hanami.html
 	public ModelMap success(Object data) {
 		return ResponseUtil.success(data);
 	}
@@ -24,7 +23,7 @@ public class BaseController {
 	public ModelMap message(String msg, HttpStatus status) {
 		return ResponseUtil.message(msg, status);
 	}
-	public ModelMap message(Object data, HttpStatus status, String msg) {
-		return ResponseUtil.message(data, status, msg);
+	public ModelMap message(Object data, String msg, HttpStatus status) {
+		return ResponseUtil.message(data, msg, status);
 	}
 }

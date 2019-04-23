@@ -1,4 +1,4 @@
-package com.xfrj.base.generator;
+package com.xfrj.core.generator;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -1,19 +1,20 @@
-package com.xfrj.base.config;
+package com.xfrj.core.shiro;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.shiro.ShiroException;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 // 
 // https://www.cnblogs.com/HowieYuan/p/9259638.html
+/**
+ * Shiro配置类
+ */
 @Configuration
 public class ShiroConfiguration {
 
@@ -48,24 +49,28 @@ public class ShiroConfiguration {
 	}
 
 	/**
-	 * @description 配置访问拦截器 
+	 * @description 配置访问拦截器
 	 * @author mutisitic
 	 * @return
 	 */
 	private Map<String, String> filterMap() {
 		// 设置拦截器
 		Map<String, String> filterRuleMap = new LinkedHashMap<>();
-		 // 访问 /unauthorized/** 不通过JWTFilter
-	    filterRuleMap.put("/unauthorized/**", "anon");
-		// 用户，需要角色权限 “user”
-		filterRuleMap.put("/user/**", "roles[user]");
-		// 管理员，需要角色权限 “admin”
-		filterRuleMap.put("/sys/**", "roles[sys]");
-		// 游客，开发权限
+		// 无权限接口
+		// 访问 /unauthorized/**
+		filterRuleMap.put("/unauthorized/**", "anon");
+		// 游客权限
 		filterRuleMap.put("/guest/**", "anon");
-		// 开放登陆接口
-		filterRuleMap.put("/app.login", "anon");
 		
+		// 移动用户权限
+		filterRuleMap.put("/app/**", "roles[app]");
+		// 管理员权限
+		filterRuleMap.put("/sys/**", "roles[sys]");
+
+		// 特殊开放接口
+		// app登录
+		filterRuleMap.put("/applogin", "anon"); 
+
 		// 其余接口一律拦截
 		// 主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
 		filterRuleMap.put("/**", "authc");

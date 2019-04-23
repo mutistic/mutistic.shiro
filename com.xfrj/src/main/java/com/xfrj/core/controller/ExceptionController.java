@@ -1,4 +1,4 @@
-package com.xfrj.base.controller;
+package com.xfrj.core.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.http.HttpStatus;
