@@ -1,8 +1,9 @@
 package com.xfrj.core.config;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AccountException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,20 +20,23 @@ public class ExceptionsHandler {
 	@ExceptionHandler({ AccountException.class, IllegalArgumentException.class})
 	@ResponseBody
 	public Object handleBusiness(HttpServletRequest request, Throwable ex) {
+		ex.printStackTrace();
 		return ResponseUtil.warn(ex.getMessage());
 	}
 	
-	@ExceptionHandler(RuntimeException.class)
+	@ExceptionHandler({RuntimeException.class, IOException.class})
 	@ResponseBody
 	public Object handleRuntime(HttpServletRequest request, Throwable ex) {
+		ex.printStackTrace();
 		return ResponseUtil.warn("系统出现异常，请联系管理员！");
 	}
 
-	@ExceptionHandler(ShiroException.class)
-	@ResponseBody
-	public Object handleShiro(HttpServletRequest request, Throwable ex) {
-		return ResponseUtil.warn("您没有权限访问！");
-	}
+//	@ExceptionHandler(ShiroException.class)
+//	@ResponseBody
+//	public Object handleShiro(HttpServletRequest request, Throwable ex) {
+//		ex.printStackTrace();
+//		return ResponseUtil.warn("您没有权限访问！");
+//	}
 	
 //	@ExceptionHandler(AccountException.class)
 //	@ResponseBody

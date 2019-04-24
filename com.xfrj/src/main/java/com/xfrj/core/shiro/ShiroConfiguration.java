@@ -8,16 +8,16 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 // 
 // https://www.cnblogs.com/HowieYuan/p/9259638.html
+// http://shiro.apache.org/static/1.3.2/apidocs/overview-summary.html
 /**
- * Shiro配置类
+ * Shiro 默认配置类
  */
-@Configuration
+//@Configuration
 public class ShiroConfiguration {
-
+	
 	// 将自己的验证方式加入容器
 	@Bean
 	public UserRealm shiroRealm() {

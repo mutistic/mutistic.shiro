@@ -1,9 +1,9 @@
-package com.xfrj.user.controller;
-
+package com.xfrj.core.shiro;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,18 +12,15 @@ import com.xfrj.core.controller.BaseController;
 import com.xfrj.core.utils.ValidateUtil;
 import com.xfrj.user.model.UserEntity;
 
-/**
- * 登录Controller
- */
 @RestController
-public class LoginController extends BaseController{
+public class TokenDemoController extends BaseController {
 
 	/**
-	 * 登录
+	 * APP登录
 	 * @param entity
 	 * @return
 	 */
-	@PostMapping("/login")
+	@PostMapping("/applogin")
 	public Object login(@RequestBody UserEntity entity) {
 		ValidateUtil.notNull(entity, "登录信息");
 		ValidateUtil.notNull(entity.getUsername(), "用户名");
@@ -35,6 +32,12 @@ public class LoginController extends BaseController{
 		UsernamePasswordToken token = new UsernamePasswordToken(entity.getUsername(), entity.getPassword());
 		// 执行认证登陆
 		subject.login(token);
-		return success(subject.getPrincipal(), "登录成功");
+		return success(subject.getPrincipal(), "APP登录成功");
 	}
+	
+	@GetMapping("/app/getMessage")
+    public Object getMessage() {
+        return success("token验证成功，可以获得该接口的信息！");
+    }
+	
 }

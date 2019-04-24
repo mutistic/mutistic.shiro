@@ -3,7 +3,7 @@
 <mapper namespace="com.xfrj.user.mapper.UserEntityMapper">
   <resultMap id="BaseResultMap" type="com.xfrj.user.model.UserEntity">
     <result column="id" jdbcType="BIGINT" property="id" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_name" jdbcType="VARCHAR" property="username" />
     <result column="password_" jdbcType="VARCHAR" property="password" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -90,7 +90,7 @@
   <insert id="insert" parameterType="com.xfrj.user.model.UserEntity">
     insert into t_user (id, user_name, password_
       )
-    values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
+    values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.xfrj.user.model.UserEntity">
@@ -99,7 +99,7 @@
       <if test="id != null">
         id,
       </if>
-      <if test="userName != null">
+      <if test="username != null">
         user_name,
       </if>
       <if test="password != null">
@@ -110,8 +110,8 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
       </if>
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
@@ -130,8 +130,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.userName != null">
-        user_name = #{record.userName,jdbcType=VARCHAR},
+      <if test="record.username != null">
+        user_name = #{record.username,jdbcType=VARCHAR},
       </if>
       <if test="record.password != null">
         password_ = #{record.password,jdbcType=VARCHAR},
@@ -144,7 +144,7 @@
   <update id="updateByExample" parameterType="map">
     update t_user
     set id = #{record.id,jdbcType=BIGINT},
-      user_name = #{record.userName,jdbcType=VARCHAR},
+      user_name = #{record.username,jdbcType=VARCHAR},
       password_ = #{record.password,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />

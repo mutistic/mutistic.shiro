@@ -13,7 +13,6 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.alibaba.fastjson.JSONObject;
 import com.xfrj.core.contants.AuthorizationContant;
 import com.xfrj.core.utils.DataConverUtil;
 import com.xfrj.user.model.UserEntity;
@@ -63,15 +62,14 @@ public class UserRealm extends AuthorizingRealm {
         }
         
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(toUserSession(user), user.getPassword(), getName());
-        System.out.println(JSONObject.toJSON(info));
         return info;
     }
 
     private UserSession toUserSession(UserEntity user) {
     	UserSession session = new UserSession();
     	session.setId(user.getId());
-    	session.setUserName(user.getUserName());
-    	session.setToken("token");
+    	session.setUserName(user.getUsername());
+    	session.setToken(TokenUtil.encryptToken(user.getUsername(), user.getPassword()));
     	return session;
     }
     
