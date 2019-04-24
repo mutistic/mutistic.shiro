@@ -1,7 +1,5 @@
 package com.xfrj.core.config;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authc.AccountException;
@@ -24,12 +22,12 @@ public class ExceptionsHandler {
 		return ResponseUtil.warn(ex.getMessage());
 	}
 	
-	@ExceptionHandler({RuntimeException.class, IOException.class})
-	@ResponseBody
-	public Object handleRuntime(HttpServletRequest request, Throwable ex) {
-		ex.printStackTrace();
-		return ResponseUtil.warn("系统出现异常，请联系管理员！");
-	}
+//	@ExceptionHandler({RuntimeException.class, IOException.class})
+//	@ResponseBody
+//	public Object handleRuntime(HttpServletRequest request, Throwable ex) {
+//		ex.printStackTrace();
+//		return ResponseUtil.warn("系统出现异常，请联系管理员！");
+//	}
 
 //	@ExceptionHandler(ShiroException.class)
 //	@ResponseBody

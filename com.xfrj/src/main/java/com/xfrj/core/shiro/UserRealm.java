@@ -61,15 +61,15 @@ public class UserRealm extends AuthorizingRealm {
             throw new AccountException("密码不正确");
         }
         
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(toUserSession(user), user.getPassword(), getName());
-        return info;
+        return new SimpleAuthenticationInfo(getSession(user), user.getPassword(), getName());
     }
 
-    private UserSession toUserSession(UserEntity user) {
+    private UserSession getSession(UserEntity user) {
     	UserSession session = new UserSession();
     	session.setId(user.getId());
-    	session.setUserName(user.getUsername());
-    	session.setToken(TokenUtil.encryptToken(user.getUsername(), user.getPassword()));
+    	session.setUsername(user.getUsername());
+    	session.setLastLoginTime(System.currentTimeMillis());
+    	session.setToken(TokenUtil.encryptToken(user.getId().toString(), session.getLastLoginTime()));
     	return session;
     }
     

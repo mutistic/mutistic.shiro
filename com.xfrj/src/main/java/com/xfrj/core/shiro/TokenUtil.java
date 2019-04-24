@@ -15,53 +15,61 @@ import com.xfrj.core.security.SecurityUtil;
 
 public class TokenUtil {
 
-	public static String encryptToken(String username, String password) {
-		String data = username + ShiroContant.TOKEN_SPLIT + password;// + ShiroContant.TOKEN_SPLIT +
-																		// System.currentTimeMillis();
-		return SecurityUtil.encryptDES(data);
+	/**
+	 * 过期时间
+	 * 	默认：7*24*60*60*1000 = 604800000
+	 */
+	private final static Long EXPIRATION_TIME = 604800000l;
+	
+	public static String encryptToken(String data, Long currentTimeMillis) {
+		String token = data + ShiroContant.TOKEN_SPLIT + (currentTimeMillis + EXPIRATION_TIME);
+		return SecurityUtil.encryptDES(token);
 	}
 
-	public static UsernamePasswordToken decryptToken(String token) {
+	public static UserSession decryptToken(String token) {
 		String data = SecurityUtil.decryptDES(token);
 		String[] array = data.split(ShiroContant.TOKEN_SPLIT);
-
-		UsernamePasswordToken userToken = new UsernamePasswordToken();
-		userToken.setUsername(array[0]);
-		userToken.setPassword(array[1].toCharArray());
+		UserSession userToken = new UserSession();
+		userToken.setId(Long.valueOf(array[0]));
+		userToken.setExpirationTime(Long.valueOf(array[1]));
 		return userToken;
 	}
 
 	public static void verifyToken(String token) {
-		UsernamePasswordToken up = null;
+		UserSession session = null;
 		try {
-			up = decryptToken(token);
+			session = decryptToken(token);
 		} catch (Exception e) {
-			throw new AccountException("token已失效，请重新登陆！");
+			e.printStackTrace();
+			throw new AccountException("token无效，请重新登陆！", e);
 		}
 
 		Subject subject = SecurityUtils.getSubject();
 		UserSession user = (UserSession) subject.getPrincipal();
 		if (user == null) {
-			throw new AccountException("请先登陆！");
+			throw new AccountException("您还未登陆，请先登陆！");
 		}
-		if (!up.getUsername().equals(user.getUserName())) {
-			throw new AccountException("token不正确，请重新登陆！");
+		if (!session.getId().equals(user.getId())) {
+			throw new AccountException("token错误，请重新登陆！");
+		}
+		if (session.getExpirationTime().compareTo(user.getLastLoginTime()) < 0) {
+			throw new AccountException("token已过期，请重新登陆！");
 		}
 	}
 
 	public static UsernamePasswordToken request2Token(ServletRequest request) {
 		try {
-			UserBody body = JSONObject.parseObject(request.getInputStream(), UserBody.class, null);
+			UserSession body = JSONObject.parseObject(request.getInputStream(), UserSession.class, null);
 			if (body == null) {
 				throw new ShiroException("非登陆接口");
 			}
 			return body2Token(body);
 		} catch (IOException e) {
-			throw new RuntimeException(e.getMessage());
+			throw new AccountException("token解析失败", e);
 		}
 	}
 
-	public static UsernamePasswordToken body2Token(UserBody user) {
+	public static UsernamePasswordToken body2Token(UserSession user) {
 		UsernamePasswordToken token = new UsernamePasswordToken();
 		token.setUsername(user.getUsername());
 		token.setPassword(user.getPassword().toCharArray());
@@ -69,7 +77,7 @@ public class TokenUtil {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(TokenUtil.encryptToken("222", "222"));
+		System.out.println(TokenUtil.encryptToken("1026448466399707138", System.currentTimeMillis()));
 	}
 
 }
