@@ -16,10 +16,16 @@ import com.xfrj.core.utils.ResponseUtil;
 @ControllerAdvice
 public class ExceptionsHandler {
 
-	@ExceptionHandler({ AccountException.class, IllegalArgumentException.class, RuntimeException.class })
+	@ExceptionHandler({ AccountException.class, IllegalArgumentException.class})
 	@ResponseBody
 	public Object handleBusiness(HttpServletRequest request, Throwable ex) {
 		return ResponseUtil.warn(ex.getMessage());
+	}
+	
+	@ExceptionHandler(RuntimeException.class)
+	@ResponseBody
+	public Object handleRuntime(HttpServletRequest request, Throwable ex) {
+		return ResponseUtil.warn("系统出现异常，请联系管理员！");
 	}
 
 	@ExceptionHandler(ShiroException.class)
