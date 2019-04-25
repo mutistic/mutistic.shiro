@@ -1,4 +1,4 @@
-package com.xfrj.core.shiro;
+package com.xfrj.core.shiro.tacitly;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,36 +8,38 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 // 
 // https://www.cnblogs.com/HowieYuan/p/9259638.html
 // http://shiro.apache.org/static/1.3.2/apidocs/overview-summary.html
+// http://shiro.apache.org/articles.html
 /**
  * Shiro 默认配置类
  */
 //@Configuration
-public class ShiroConfiguration {
+public class ShiroDefaultConfiguration {
 	
 	// 将自己的验证方式加入容器
 	@Bean
-	public UserRealm shiroRealm() {
-		return new UserRealm();
+	public UserDefaultRealm defaultShiroRealm() {
+		return new UserDefaultRealm();
 	}
 
 	// 权限管理，配置主要是Realm的管理认证
 	@Bean
-	public SecurityManager securityManager() {
+	public SecurityManager defaultSecurityManager() {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-		securityManager.setRealm(shiroRealm());
+		securityManager.setRealm(defaultShiroRealm());
 		return securityManager;
 	}
 
 	// Filter工厂，设置对应的过滤条件和跳转条件
 	@Bean
-	public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+	public ShiroFilterFactoryBean defaultShiroFilterFactoryBean() {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		// 必须设置 SecurityManager
-		shiroFilterFactoryBean.setSecurityManager(securityManager);
+		shiroFilterFactoryBean.setSecurityManager(defaultSecurityManager());
 		// setLoginUrl 如果不设置值，默认会自动寻找Web工程根目录下的"/login.jsp"页面 或 "/login" 映射
 		shiroFilterFactoryBean.setLoginUrl("/notLogin");
 		// 设置无权限时跳转的 url;
@@ -79,9 +81,9 @@ public class ShiroConfiguration {
 
 	// 加入注解的使用，不加入这个注解不生效
 	@Bean
-	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+	public AuthorizationAttributeSourceAdvisor defaultAuthorizationAttributeSourceAdvisor() {
 		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+		authorizationAttributeSourceAdvisor.setSecurityManager(defaultSecurityManager());
 		return authorizationAttributeSourceAdvisor;
 	}
 }

@@ -1,6 +1,9 @@
 package com.xfrj.core.shiro;
 
-public class UserSession {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class UserSession implements Serializable {
 	private Long id;
 	private String username;
 	private String password;

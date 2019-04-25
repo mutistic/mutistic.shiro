@@ -1,4 +1,4 @@
-package com.xfrj.core.shiro;
+package com.xfrj.core.shiro.token;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 

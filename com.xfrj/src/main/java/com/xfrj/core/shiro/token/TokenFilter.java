@@ -1,4 +1,4 @@
-package com.xfrj.core.shiro;
+package com.xfrj.core.shiro.token;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+
 
 /**
  * Token 过滤器
@@ -17,7 +18,7 @@ public class TokenFilter extends BasicHttpAuthenticationFilter {
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		String token = httpServletRequest.getHeader(ShiroContant.TOKEN);
+		String token = httpServletRequest.getHeader(TokenUtil.TOKEN);
 		if (token == null || token.trim().length() == 0) {
 			throw new AccountException("请先登陆！");
 		}

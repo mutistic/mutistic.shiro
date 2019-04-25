@@ -1,4 +1,4 @@
-package com.xfrj.core.shiro;
+package com.xfrj.core.shiro.token;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,47 +18,47 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Shiro Token 配置类
  */
-@Configuration
+//@Configuration
 public class ShiroTokenConfiguration {
 	
 	// 将自己的验证方式加入容器
 	@Bean
-	public UserRealm shiroRealm() {
-		return new UserRealm();
+	public UserTokenRealm tokenShiroRealm() {
+		return new UserTokenRealm();
 	}
 
 	// 权限管理，配置主要是Realm的管理认证
 	@Bean
-	public SecurityManager securityManager() {
+	public SecurityManager tokenSecurityManager() {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-		securityManager.setRealm(shiroRealm());
+		securityManager.setRealm(tokenShiroRealm());
 		return securityManager;
 	}
 
 	@Bean
-	public ShiroFilterFactoryBean factory(SecurityManager securityManager) {
+	public ShiroFilterFactoryBean tokenShirofactory() {
 	    ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
 	   
 	    // 设置自定义Filter
 	    Map<String, Filter> filterMap = new HashMap<>();
 	    filterMap.put("token", new TokenFilter()); // token filter
 	    factoryBean.setFilters(filterMap);
-	    factoryBean.setSecurityManager(securityManager);
+	    factoryBean.setSecurityManager(tokenSecurityManager());
 	    
 	    // 设置访问路径
 	    Map<String, String> filterRuleMap = new HashMap<>();
-	    filterRuleMap.put("/applogin", "anon"); // app登陆
+	    filterRuleMap.put("/token/applogin", "anon"); // app登陆
 	    filterRuleMap.put("/unauthorized/**", "anon");
-	    filterRuleMap.put("/app/**", "token");
+	    filterRuleMap.put("/token/app/**", "token");
 	    factoryBean.setFilterChainDefinitionMap(filterRuleMap);
 	    return factoryBean;
 	}
 
 	// 加入注解的使用，不加入这个注解不生效
 	@Bean
-	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+	public AuthorizationAttributeSourceAdvisor tokenAuthorizationAttributeSourceAdvisor() {
 		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+		authorizationAttributeSourceAdvisor.setSecurityManager(tokenSecurityManager());
 		return authorizationAttributeSourceAdvisor;
 	}
 }

@@ -1,4 +1,4 @@
-package com.xfrj.core.shiro;
+package com.xfrj.core.shiro.redis;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AccountException;
@@ -14,6 +14,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.xfrj.core.contants.AuthorizationContant;
+import com.xfrj.core.shiro.UserSession;
+import com.xfrj.core.shiro.token.TokenUtil;
 import com.xfrj.core.utils.DataConverUtil;
 import com.xfrj.user.model.UserEntity;
 import com.xfrj.user.service.ILoginService;
@@ -21,7 +23,7 @@ import com.xfrj.user.service.ILoginService;
 /**
  * Shiro 用户认证规则
  */
-public class UserRealm extends AuthorizingRealm {
+public class UserRedisRealm extends AuthorizingRealm {
 
 	@Autowired
 	private ILoginService loginService;
@@ -69,7 +71,6 @@ public class UserRealm extends AuthorizingRealm {
     	session.setId(user.getId());
     	session.setUsername(user.getUsername());
     	session.setLastLoginTime(System.currentTimeMillis());
-    	session.setToken(TokenUtil.encryptToken(user.getId().toString(), session.getLastLoginTime()));
     	return session;
     }
     

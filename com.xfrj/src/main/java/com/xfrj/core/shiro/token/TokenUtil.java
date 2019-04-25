@@ -1,4 +1,4 @@
-package com.xfrj.core.shiro;
+package com.xfrj.core.shiro.token;
 
 import java.io.IOException;
 
@@ -12,9 +12,13 @@ import org.apache.shiro.subject.Subject;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xfrj.core.security.SecurityUtil;
+import com.xfrj.core.shiro.UserSession;
 
 public class TokenUtil {
 
+	public final static String TOKEN = "token";
+	public final static String TOKEN_SPLIT = "###";
+	
 	/**
 	 * 过期时间
 	 * 	默认：7*24*60*60*1000 = 604800000
@@ -22,13 +26,13 @@ public class TokenUtil {
 	private final static Long EXPIRATION_TIME = 604800000l;
 	
 	public static String encryptToken(String data, Long currentTimeMillis) {
-		String token = data + ShiroContant.TOKEN_SPLIT + (currentTimeMillis + EXPIRATION_TIME);
+		String token = data + TOKEN_SPLIT + (currentTimeMillis + EXPIRATION_TIME);
 		return SecurityUtil.encryptDES(token);
 	}
 
 	public static UserSession decryptToken(String token) {
 		String data = SecurityUtil.decryptDES(token);
-		String[] array = data.split(ShiroContant.TOKEN_SPLIT);
+		String[] array = data.split(TOKEN_SPLIT);
 		UserSession userToken = new UserSession();
 		userToken.setId(Long.valueOf(array[0]));
 		userToken.setExpirationTime(Long.valueOf(array[1]));

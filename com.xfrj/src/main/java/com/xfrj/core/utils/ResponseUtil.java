@@ -1,6 +1,7 @@
 package com.xfrj.core.utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,7 @@ public class ResponseUtil {
 	 */
 	public static ModelMap message(Object data, String msg, HttpStatus status) {
 		ModelMap model = new ModelMap();
+		model.put("timestamp", new Date());
 		// data格式： data:[{},{}] or data:{}
 //		model.put("data", JSONObject.toJSON(data));
 		// data格式： data:[{},{}]
@@ -72,9 +74,9 @@ public class ResponseUtil {
 				}
 			}));
 		}
-		model.put("code", status.value());
-		model.put("msg", msg == null ? status.getReasonPhrase() : msg);
-		model.put("timestamp", System.currentTimeMillis());
+		model.put("status", status.value());
+		model.put("message", msg == null ? status.getReasonPhrase() : msg);
+		model.put("timemillis", System.currentTimeMillis());
 		log.info("response===> " + JSON.toJSONString(model));
 		return model;
 	}
