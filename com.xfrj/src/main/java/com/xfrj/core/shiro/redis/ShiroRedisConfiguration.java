@@ -1,7 +1,6 @@
 package com.xfrj.core.shiro.redis;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.shiro.mgt.SecurityManager;
@@ -17,8 +16,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import cn.hutool.core.codec.Base64;
-
 /**
  * Shiro redis 配置类
  */
@@ -28,7 +25,7 @@ public class ShiroRedisConfiguration {
 	// https://blog.csdn.net/u010514380/article/details/82185451
 
 	@Autowired
-	private RedisTemplate<String, String> template;
+	private RedisTemplate<Object, Object> template;
 
 	// 将自己的验证方式加入容器
 	@Bean

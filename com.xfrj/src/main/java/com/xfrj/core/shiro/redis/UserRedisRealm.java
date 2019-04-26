@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.xfrj.core.contants.AuthorizationContant;
 import com.xfrj.core.shiro.UserSession;
-import com.xfrj.core.shiro.token.TokenUtil;
 import com.xfrj.core.utils.DataConverUtil;
 import com.xfrj.user.model.UserEntity;
 import com.xfrj.user.service.ILoginService;

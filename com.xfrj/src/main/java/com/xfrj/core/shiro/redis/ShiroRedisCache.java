@@ -1,9 +1,7 @@
 package com.xfrj.core.shiro.redis;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,107 +9,79 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import cn.hutool.core.util.ObjectUtil;
+@SuppressWarnings({"unchecked" })
+public class ShiroRedisCache<K, V> implements Cache<K, V> {
+	
+	private RedisTemplate<Object, Object> redisTemplate;
+	private String prefix = "shiro-session:";
 
 
-public class ShiroRedisCache<K,V> implements Cache<K,V> {
-    private RedisTemplate redisTemplate;
-    private String prefix = "shiro_redis";
+	public ShiroRedisCache(RedisTemplate<Object, Object> redisTemplate) {
+		this.redisTemplate = redisTemplate;
+	}
 
-    public String getPrefix() {
-        return prefix+":";
-    }
+	public ShiroRedisCache(RedisTemplate<Object, Object> redisTemplate, String prefix) {
+		this(redisTemplate);
+		this.prefix += prefix;
+	}
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
+	@Override
+	public V get(K k) throws CacheException {
+		if (k == null) {
+			return null;
+		}
+		return (V) redisTemplate.opsForValue().get(prefix(k));
 
-    public ShiroRedisCache(RedisTemplate redisTemplate){
-        this.redisTemplate = redisTemplate;
-    }
+	}
 
-    public ShiroRedisCache(RedisTemplate redisTemplate,String prefix){
-        this(redisTemplate);
-        this.prefix = prefix;
-    }
+	@Override
+	public V put(K k, V v) throws CacheException {
+		if (k == null || v == null) {
+			return null;
+		}
 
-    @Override
-    public V get(K k) throws CacheException {
-        if (k == null) {
-            return null;
-        }
-        byte[] bytes = getBytesKey(k);
-        return (V)redisTemplate.opsForValue().get(bytes);
+		redisTemplate.opsForValue().set(prefix(k), v);
+		return v;
+	}
 
-    }
+	@Override
+	public V remove(K k) throws CacheException {
+		if (k == null) {
+			return null;
+		}
+		V v = (V) redisTemplate.opsForValue().get(prefix(k));
+		redisTemplate.delete(prefix(k));
+		return v;
+	}
 
-    @Override
-    public V put(K k, V v) throws CacheException {
-        if (k== null || v == null) {
-            return null;
-        }
+	@Override
+	public void clear() throws CacheException {
+		redisTemplate.getConnectionFactory().getConnection().flushDb();
 
-        byte[] bytes = getBytesKey(k);
-        redisTemplate.opsForValue().set(bytes, v);
-        return v;
-    }
+	}
 
-    @Override
-    public V remove(K k) throws CacheException {
-        if(k==null){
-            return null;
-        }
-        byte[] bytes =getBytesKey(k);
-        V v = (V)redisTemplate.opsForValue().get(bytes);
-        redisTemplate.delete(bytes);
-        return v;
-    }
+	@Override
+	public int size() {
+		return redisTemplate.getConnectionFactory().getConnection().dbSize().intValue();
+	}
 
-    @Override
-    public void clear() throws CacheException {
-        redisTemplate.getConnectionFactory().getConnection().flushDb();
+	@Override
+	public Set<K> keys() {
+		return (Set<K>) redisTemplate.keys(this.prefix + "*");
+	}
 
-    }
+	@Override
+	public Collection<V> values() {
+		Set<K> keys = keys();
+		List<V> values = new ArrayList<>(keys.size());
+		for (K k : keys) {
+			values.add(get(k));
+		}
+		return values;
+	}
 
-    @Override
-    public int size() {
-        return redisTemplate.getConnectionFactory().getConnection().dbSize().intValue();
-    }
-
-    @Override
-    public Set<K> keys() {
-        byte[] bytes = (getPrefix()+"*").getBytes();
-        Set<byte[]> keys = redisTemplate.keys(bytes);
-        Set<K> sets = new HashSet<>();
-        for (byte[] key:keys) {
-            sets.add((K)key);
-        }
-        return sets;
-    }
-
-    @Override
-    public Collection<V> values() {
-        Set<K> keys = keys();
-        List<V> values = new ArrayList<>(keys.size());
-        for(K k :keys){
-            values.add(get(k));
-        }
-        return values;
-    }
-
-    private byte[] getBytesKey(K key){
-        if(key instanceof String){
-            String prekey = this.getPrefix() + key;
-            try {
-				return prekey.getBytes("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-        }else {
-            return ObjectUtil.serialize(key);
-        }
-    }
+	private String prefix(K key) {
+		return this.prefix + key;
+	}
 
 }
