@@ -19,7 +19,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 /**
  * Shiro redis 配置类
  */
-@Configuration
+//@Configuration
 public class ShiroRedisConfiguration {
 
 	// https://blog.csdn.net/u010514380/article/details/82185451
