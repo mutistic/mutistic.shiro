@@ -15,7 +15,7 @@ public class RedisTestController extends BaseController {
 
 	@PostMapping("/applogin")
 	public Object login(@RequestBody UserEntity entity) {
-		return success(RedisUtil.set("userentity", entity), "APP登录成功");
+		return success(RedisUtil.set(entity.getUsername(), entity, 10l, false), "APP登录成功");
 	}
 	
 	@GetMapping("/app/getMessage")

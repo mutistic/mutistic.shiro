@@ -1,0 +1,74 @@
+{
+	"info": {
+		"_postman_id": "2a3d8472-f1e8-4ea2-9f17-dcbd725166c6",
+		"name": "xfrj",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"item": []
+		},
+		{
+			"name": "redis",
+			"item": [
+				{
+					"name": "redis set",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"111\",\n\t\"password\": 111\n}"
+						},
+						"url": {
+							"raw": "http://localhost:9088/redisTest/applogin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9088",
+							"path": [
+								"redisTest",
+								"applogin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "redis get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:9088/redisTest/app/getMessage",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9088",
+							"path": [
+								"redisTest",
+								"app",
+								"getMessage"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

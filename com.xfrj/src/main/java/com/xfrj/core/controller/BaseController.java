@@ -2,11 +2,9 @@ package com.xfrj.core.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.ModelMap;
 
-import com.xfrj.core.redis.RedisCache;
 import com.xfrj.core.utils.ResponseUtil;
 
 public class BaseController {
