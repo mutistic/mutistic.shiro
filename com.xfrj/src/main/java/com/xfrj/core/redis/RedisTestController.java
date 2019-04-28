@@ -15,12 +15,12 @@ public class RedisTestController extends BaseController {
 
 	@PostMapping("/applogin")
 	public Object login(@RequestBody UserEntity entity) {
-		return success(RedisUtil.set(entity.getUsername(), entity, 10l, false), "APP登录成功");
+		RedisUtil.opsForHash.put("user", entity.getUsername(), entity, 100l);
+		return success(null, "put success");
 	}
 	
 	@GetMapping("/app/getMessage")
 	public Object getMessage() {
-		UserEntity suer = RedisUtil.get("userentity", UserEntity.class);
-		return success(suer);
+		return success(RedisUtil.opsForHash.entries("user"));
 	}
 }

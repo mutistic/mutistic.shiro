@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
@@ -33,16 +32,8 @@ public class RedisConfiguration {
 		redisTemplate.setHashKeySerializer(keySerializer);
 		redisTemplate.setHashValueSerializer(valueSerializer);
 		redisTemplate.afterPropertiesSet();
+		
+		RedisUtil.setRedisTemplate(redisTemplate); 
 		return redisTemplate;
 	}
-	@Autowired
-	private StringRedisTemplate  stringRedisTemplate;
-	
-	@Bean
-	public RedisCache serializableRedisCache() {
-//		RedisUtil.setRedisCache(new RedisCache(serializableRedisTemplate()));
-		RedisUtil.setRedisCache(new RedisCache(stringRedisTemplate));
-		return RedisUtil.getRedisCache();
-	}
-
 }

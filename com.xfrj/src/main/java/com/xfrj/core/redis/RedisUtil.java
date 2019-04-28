@@ -1,53 +1,35 @@
 package com.xfrj.core.redis;
 
-import com.alibaba.fastjson.JSONObject;
+import org.springframework.data.redis.core.RedisTemplate;
 
 public class RedisUtil {
-	
-	private static RedisCache redisCache;
-	public static RedisCache getRedisCache() {
-		return redisCache;
-	}
-	public static void setRedisCache(RedisCache redisCache) {
-		RedisUtil.redisCache = redisCache;
-	}
+	private RedisUtil() { }
 
-	public static <T> T get(Object key, Class<T> cls) {
-		try {
-			Object obj = redisCache.get(key);
-			return isJsonObject(obj) ? JSONObject.toJavaObject((JSONObject) obj, cls) : (T) obj;
-		} catch (Exception e) {
-			throw new RedisCacheException(e);
+	/**
+	 * RedisCache.getRedisTemplate()：
+	 * KeySerializer/HashKeySerializer：org.springframework.data.redis.serializer.StringRedisSerializer
+	 * ValueSerializer/HashValueSerializer：com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer
+	 */
+	/** spring redis templeate */
+	private static RedisTemplate redisTemplate;
+	public static RedisStringCache opsForValue;
+	public static RedisHashCache opsForHash;
+
+	public static void setRedisTemplate(RedisTemplate redisTemplate) {
+		if (null == redisTemplate) {
+			throw new RedisCacheException("redis-init:redisTemplate初始化失败！");
 		}
+
+		RedisUtil.redisTemplate = redisTemplate;
+		opsForValue = new RedisStringCache(redisTemplate().opsForValue());
+		opsForHash = new RedisHashCache(redisTemplate().opsForHash());
+		opsForHash.setOpsForValue(opsForValue);
 	}
 
-	public static Object get(Object key) {
-		try {
-			return redisCache.get(key);
-		} catch (Exception e) {
-			throw new RedisCacheException(e);
+	public static RedisTemplate redisTemplate() {
+		if (null == redisTemplate) {
+			throw new RedisCacheException("redis-init:redisTemplate未初始化！");
 		}
+		return redisTemplate;
 	}
-
-	public static Object set(Object key, Object value) {
-		return set(key, value, null, null);
-	}
-	
-	public static Object set(Object key, Object value, Long expSeconds) {
-		return set(key, value, expSeconds, null);
-	}
-	
-	public static Object set(Object key, Object value, Long expSeconds, Boolean isAbsent) {
-		try {
-			return redisCache.set(key, value, expSeconds, isAbsent);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RedisCacheException(e);
-		}
-	}
-	
-	private static boolean isJsonObject(Object obj){
-		return obj != null && obj instanceof JSONObject;
-	}
-
 }

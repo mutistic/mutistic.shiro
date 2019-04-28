@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.xfrj.core.redis.RedisCacheException;
 import com.xfrj.core.utils.ResponseUtil;
 
 /**
@@ -19,7 +20,7 @@ import com.xfrj.core.utils.ResponseUtil;
 @ResponseBody
 public class CustomExceptionsHandler {
 	
-	@ExceptionHandler({ AccountException.class, IllegalArgumentException.class})
+	@ExceptionHandler({ AccountException.class, IllegalArgumentException.class, RedisCacheException.class})
 	public Object handleBusiness(HttpServletRequest request, Throwable ex) {
 		ex.printStackTrace();
 		return ResponseUtil.warn(ex.getMessage());
