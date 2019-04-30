@@ -37,7 +37,7 @@ public class RedisDemoController extends BaseController {
 		// 执行认证登陆
 		subject.login(token);
 
-		Session session = subject.getSession(true);
+		Session session = subject.getSession(false);
 		// 主机
 		System.out.println("host:" + session.getHost());
 		// session超时时间

@@ -1,6 +1,7 @@
 package com.xfrj.core.redis;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.redis.core.ValueOperations;
@@ -10,15 +11,16 @@ public class RedisStringCache {
 	private ValueOperations opsForValue;
 
 	public RedisStringCache(ValueOperations opsForValue) {
-		if(opsForValue == null) {
-			throw new RedisCacheException("redis-init-opearion:注入ValueOperations出现异常！");
-		}
-		
+		RedisUtil.notNullMsg(opsForValue, "redis-init-opearion: opsForValue cannot be null");
 		this.opsForValue = opsForValue;
 	}
 
 	public Object get(String key) {
 		return opsForValue.get(key);
+	}
+	
+	public List<Object> get(Collection<String> keys) {
+		return opsForValue.multiGet(keys);
 	}
 
 	public Boolean delete(String key) {

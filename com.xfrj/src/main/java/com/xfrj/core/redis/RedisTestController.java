@@ -10,17 +10,19 @@ import com.xfrj.core.controller.BaseController;
 import com.xfrj.user.model.UserEntity;
 
 @RestController
-@RequestMapping("/redisTest")
+@RequestMapping("/test/redis")
 public class RedisTestController extends BaseController {
 
 	@PostMapping("/applogin")
 	public Object login(@RequestBody UserEntity entity) {
-		RedisUtil.opsForHash.put("user", entity.getUsername(), entity, 100l);
+		RedisUtil.opsForHashExp.put("user", entity.getUsername(), entity, 100l);
 		return success(null, "put success");
 	}
 	
 	@GetMapping("/app/getMessage")
 	public Object getMessage() {
-		return success(RedisUtil.opsForHash.entries("user"));
+//		return success(RedisUtil.opsForHash.entries("user"));
+		return success(RedisUtil.opsForHashExp.expKeys("user"));
 	}
+	
 }

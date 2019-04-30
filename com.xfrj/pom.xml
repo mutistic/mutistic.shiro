@@ -81,10 +81,9 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.47</version>
 		</dependency>
-		<dependency> <!-- hutool java工具包 -->
-		    <groupId>cn.hutool</groupId>
-		    <artifactId>hutool-all</artifactId>
-		    <version>4.5.6</version>
+		<dependency> <!-- google gson json处理工具包 -->
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
 		</dependency>
 
 		<!-- redis相关 -->

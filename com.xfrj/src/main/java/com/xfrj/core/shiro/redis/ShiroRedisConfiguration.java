@@ -1,5 +1,6 @@
 package com.xfrj.core.shiro.redis;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,10 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * Shiro redis 配置类
@@ -23,9 +27,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class ShiroRedisConfiguration {
 
 	// https://blog.csdn.net/u010514380/article/details/82185451
-
-	@Autowired
-	private RedisTemplate<Object, Object> template;
 
 	// 将自己的验证方式加入容器
 	@Bean
@@ -57,6 +58,7 @@ public class ShiroRedisConfiguration {
 	private Map<String, String> filterMap() {
 		 // 设置访问路径
 	    Map<String, String> filterRuleMap = new HashMap<>();
+	    filterRuleMap.put("/test/**", "anon");
 	    filterRuleMap.put("/redis/applogin", "anon"); // app登陆
 	    filterRuleMap.put("/unauthorized/**", "anon");
 	    filterRuleMap.put("/redis/app/**", "roles[app]");
@@ -74,7 +76,7 @@ public class ShiroRedisConfiguration {
 		securityManager.setRememberMeManager(redisRememberMeManager());
 		// 配置 缓存管理类 cacheManager，这个cacheManager必须要在前面执行，因为setRealm 和
 		// setSessionManage都有方法初始化了cachemanager,看下源码就知道了
-		securityManager.setCacheManager(new ShiroRedisCacheManager(template));
+		securityManager.setCacheManager(shoiroRedisCacheManager());
 		// 配置 SecurityManager，并注入 shiroRealm 这个跟springmvc集成很像，不多说了
 		securityManager.setRealm(redisShiroRealm());
 		// 配置 sessionManager
@@ -82,6 +84,35 @@ public class ShiroRedisConfiguration {
 		return securityManager;
 	}
 
+	@Autowired
+	private RedisConnectionFactory redisConnectionFactory;
+	@Bean
+	public ShiroRedisCacheManager shoiroRedisCacheManager() {
+//		return new ShiroRedisCacheManager(new RedisTemplate<Serializable, Session>());
+		// 自定义类型
+		RedisTemplate<String, Serializable> redisTemplate = new RedisTemplate<String, Serializable>();
+		redisTemplate.setEnableTransactionSupport(false);
+		redisTemplate.setConnectionFactory(redisConnectionFactory);
+		/**
+		 * shiro + redis 实现session缓存时
+		 * value: org.apache.shiro.session.mgt.SimpleSession：
+		 * valueSerializer在使用 GenericJackson2JsonRedisSerializer/GenericFastJsonRedisSerializer 
+		 * 反序列化时，由于SimpleSession.attributes数据类型Map<Object,Object> 会导致反序列化失败，
+		 * 故采用默认序列化：JdkSerializationRedisSerializer
+		 */
+		// String 序列化
+		StringRedisSerializer keySerializer = new StringRedisSerializer();
+		// jdk序列化
+		JdkSerializationRedisSerializer jdkSerializer = new JdkSerializationRedisSerializer();
+		redisTemplate.setKeySerializer(keySerializer);
+		redisTemplate.setValueSerializer(jdkSerializer);
+//		redisTemplate.setHashKeySerializer(keySerializer);
+//		redisTemplate.setHashValueSerializer(jdkSerializer);
+		redisTemplate.afterPropertiesSet();
+		return new ShiroRedisCacheManager(redisTemplate);
+	}
+	
+	
 	/**
 	 * cookie管理对象
 	 *

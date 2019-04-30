@@ -9,20 +9,26 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.springframework.data.redis.core.RedisTemplate;
 
-@SuppressWarnings({"unchecked" })
+import com.alibaba.fastjson.JSONObject;
+
+/**
+ * shiro cache使用redis缓存实现session的管理
+ * @param <K> String:sessionId
+ * @param <V> org.apache.shiro.session.mgt.SimpleSession：session实例
+ */
 public class ShiroRedisCache<K, V> implements Cache<K, V> {
 	
-	private RedisTemplate<Object, Object> redisTemplate;
-	private String prefix = "shiro-session:";
+	private RedisTemplate redisTemplate;
+	private String cacheName;
 
 
-	public ShiroRedisCache(RedisTemplate<Object, Object> redisTemplate) {
+	public ShiroRedisCache(RedisTemplate redisTemplate) {
 		this.redisTemplate = redisTemplate;
 	}
 
-	public ShiroRedisCache(RedisTemplate<Object, Object> redisTemplate, String prefix) {
-		this(redisTemplate);
-		this.prefix += prefix;
+	public ShiroRedisCache(RedisTemplate redisTemplate, String cacheName) {
+		this.redisTemplate = redisTemplate;
+		this.cacheName = cacheName;
 	}
 
 	@Override
@@ -30,7 +36,8 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 		if (k == null) {
 			return null;
 		}
-		return (V) redisTemplate.opsForValue().get(prefix(k));
+		
+		return (V) redisTemplate.opsForValue().get(k);
 
 	}
 
@@ -39,8 +46,9 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 		if (k == null || v == null) {
 			return null;
 		}
-
-		redisTemplate.opsForValue().set(prefix(k), v);
+		
+		System.out.println(JSONObject.toJSON(v));
+		redisTemplate.opsForValue().set(k, v);
 		return v;
 	}
 
@@ -49,8 +57,8 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 		if (k == null) {
 			return null;
 		}
-		V v = (V) redisTemplate.opsForValue().get(prefix(k));
-		redisTemplate.delete(prefix(k));
+		V v = (V) redisTemplate.opsForValue().get(k);
+		redisTemplate.delete(k);
 		return v;
 	}
 
@@ -67,7 +75,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public Set<K> keys() {
-		return (Set<K>) redisTemplate.keys(this.prefix + "*");
+		return (Set<K>) redisTemplate.keys("*");
 	}
 
 	@Override
@@ -78,10 +86,6 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 			values.add(get(k));
 		}
 		return values;
-	}
-
-	private String prefix(K key) {
-		return this.prefix + key;
 	}
 
 }

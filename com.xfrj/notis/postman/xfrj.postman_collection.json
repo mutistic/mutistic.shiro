@@ -1,72 +1,338 @@
 {
+	"variables": [],
 	"info": {
-		"_postman_id": "2a3d8472-f1e8-4ea2-9f17-dcbd725166c6",
-		"name": "xfrj",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"name": "XFRJ",
+		"_postman_id": "b6b45ccc-4632-447b-b0ce-6cf46c81acd8",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "login",
-			"item": []
-		},
-		{
-			"name": "redis",
+			"description": "",
 			"item": [
 				{
-					"name": "redis set",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"username\":\"111\",\n\t\"password\": 111\n}"
+					"name": "default",
+					"description": "",
+					"item": [
+						{
+							"name": "游客测试接口",
+							"request": {
+								"url": "http://127.0.0.1:9088/guest/getMessage",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "http://localhost:9088/redisTest/applogin",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "9088",
-							"path": [
-								"redisTest",
-								"applogin"
-							]
+						{
+							"name": "用户测试接口",
+							"request": {
+								"url": "http://127.0.0.1:9088/app/getMessage",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "管理员测试接口",
+							"request": {
+								"url": "http://127.0.0.1:9088/sys/getMessage",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "普通登录",
+							"request": {
+								"url": "http://127.0.0.1:9088/applogin",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"userName\": \"1111\",\n\t\"password\": \"1111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "未登陆",
+							"request": {
+								"url": "http://127.0.0.1:9088/xfrj/notLogin",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "用户登出",
+							"request": {
+								"url": "http://127.0.0.1:9088/xfrj/logout",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"_postman_isSubFolder": true
 				},
 				{
-					"name": "redis get",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
+					"name": "token",
+					"description": "",
+					"item": [
+						{
+							"name": "token登陆",
+							"request": {
+								"url": "http://127.0.0.1:9088/token/applogin",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "http://localhost:9088/redisTest/app/getMessage",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "9088",
-							"path": [
-								"redisTest",
-								"app",
-								"getMessage"
-							]
+						{
+							"name": "token测试访问",
+							"request": {
+								"url": "http://127.0.0.1:9088/token/app/getMessage",
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "nzP0UdBN1ZeVpT9NTyM215KyNxrX9BQJ",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"userName\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "token测试退出",
+							"request": {
+								"url": "http://127.0.0.1:9088/token/app/loginout",
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "nzP0UdBN1ZdSHffB08dNRpx/gb7BMltj",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"userName\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "token登录2",
+							"request": {
+								"url": "http://127.0.0.1:9088/applogin",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\": \"222\",\n\t\"password\": \"222\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "token测试访问2",
+							"request": {
+								"url": "http://127.0.0.1:9088/app/getMessage",
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "MocFEWIdn3922QjBAVJucg==",
+										"description": ""
+									}
+								],
+								"body": {},
+								"description": ""
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "shiro+redis管理session",
+					"description": "",
+					"item": [
+						{
+							"name": "redis登陆",
+							"request": {
+								"url": "http://127.0.0.1:9088/redis/applogin",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "redis测试访问",
+							"request": {
+								"url": "http://127.0.0.1:9088/redis/app/getMessage",
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "nzP0UdBN1ZeVpT9NTyM215KyNxrX9BQJ",
+										"description": "",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"userName\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "redis测试退出",
+							"request": {
+								"url": "http://127.0.0.1:9088/redis/app/loginout",
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "nzP0UdBN1ZdSHffB08dNRpx/gb7BMltj",
+										"description": "",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"userName\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "redis",
+					"description": "",
+					"item": [
+						{
+							"name": "redis set",
+							"request": {
+								"url": "http://localhost:9088/test/redis/applogin",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\":\"sss\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "redis get",
+							"request": {
+								"url": "http://localhost:9088/test/redis/app/getMessage",
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		}
