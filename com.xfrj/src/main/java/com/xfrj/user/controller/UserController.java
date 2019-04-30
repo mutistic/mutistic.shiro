@@ -11,7 +11,7 @@ import com.xfrj.core.controller.BaseController;
 public class UserController extends BaseController {
 
 	@GetMapping("/getMessage")
-	public Object submitLogin() {
+	public Object getMessage() {
 		return success("您拥有获得该接口的信息的权限！");
 	}
 }

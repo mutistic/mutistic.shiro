@@ -1,4 +1,4 @@
-package com.xfrj.core.shiro.redis;
+package com.xfrj.login.shiro.session;
 
 import org.apache.shiro.cache.AbstractCacheManager;
 import org.apache.shiro.cache.Cache;
@@ -6,7 +6,7 @@ import org.apache.shiro.cache.CacheException;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
- * shrio redis 缓存管理器
+ * shiro cache 使用 redis
  */
 public class ShiroRedisCacheManager extends AbstractCacheManager {
 

@@ -1,6 +1,7 @@
 package com.xfrj.core.shiro.token;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.Filter;
@@ -10,7 +11,6 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 // 
 // https://www.cnblogs.com/HowieYuan/p/9259638.html
@@ -46,10 +46,10 @@ public class ShiroTokenConfiguration {
 	    factoryBean.setSecurityManager(tokenSecurityManager());
 	    
 	    // 设置访问路径
-	    Map<String, String> filterRuleMap = new HashMap<>();
-	    filterRuleMap.put("/token/applogin", "anon"); // app登陆
+	    Map<String, String> filterRuleMap = new LinkedHashMap<String, String>();
 	    filterRuleMap.put("/unauthorized/**", "anon");
-	    filterRuleMap.put("/token/app/**", "token");
+	    filterRuleMap.put("/shiro/token/applogin", "anon"); // app登陆
+	    filterRuleMap.put("/shiro/token/app/**", "token");
 	    factoryBean.setFilterChainDefinitionMap(filterRuleMap);
 	    return factoryBean;
 	}

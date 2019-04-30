@@ -127,7 +127,7 @@
 						{
 							"name": "token登陆",
 							"request": {
-								"url": "http://127.0.0.1:9088/token/applogin",
+								"url": "http://127.0.0.1:9088/shiro/token/login",
 								"method": "POST",
 								"header": [
 									{
@@ -225,7 +225,7 @@
 					"_postman_isSubFolder": true
 				},
 				{
-					"name": "shiro+redis管理session",
+					"name": "session",
 					"description": "",
 					"item": [
 						{
@@ -327,6 +327,90 @@
 									"mode": "raw",
 									"raw": ""
 								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "applogin",
+					"description": "",
+					"item": [
+						{
+							"name": "app登陆",
+							"request": {
+								"url": "http://127.0.0.1:9088/app/login",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "app测试访问",
+							"request": {
+								"url": "http://127.0.0.1:9088/app/getMessage",
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "MjZC2c+7mLlkYpTQ5s7OTVNFfyCVT1w+",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "sys测试访问",
+							"request": {
+								"url": "http://127.0.0.1:9088/sys/getMessage",
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "MjZC2c+7mLlkYpTQ5s7OTVNFfyCVT1w+",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"111\",\n\t\"password\": \"111\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "app登出",
+							"request": {
+								"url": "http://127.0.0.1:9088/app/loginout",
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "MjZC2c+7mLlkYpTQ5s7OTVNFfyCVT1w+",
+										"description": ""
+									}
+								],
+								"body": {},
 								"description": ""
 							},
 							"response": []

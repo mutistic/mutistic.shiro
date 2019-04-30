@@ -22,19 +22,16 @@ public class CustomExceptionsHandler {
 	
 	@ExceptionHandler({ AccountException.class, IllegalArgumentException.class, RedisCacheException.class})
 	public Object handleBusiness(HttpServletRequest request, Throwable ex) {
-		ex.printStackTrace();
 		return ResponseUtil.warn(ex.getMessage());
 	}
 	
 	@ExceptionHandler({Exception.class, RuntimeException.class, IOException.class})
 	public Object handleRuntime(HttpServletRequest request, Throwable ex) {
-		ex.printStackTrace();
 		return ResponseUtil.warn("系统出现异常，请联系管理员！");
 	}
 
 	@ExceptionHandler(ShiroException.class)
 	public Object handleShiro(HttpServletRequest request, Throwable ex) {
-		ex.printStackTrace();
 		return ResponseUtil.warn("您没有权限访问！");
 	}
 

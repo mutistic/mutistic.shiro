@@ -2,6 +2,7 @@ package com.xfrj.core.shiro.redis;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.shiro.mgt.SecurityManager;
@@ -57,11 +58,11 @@ public class ShiroRedisConfiguration {
 	 */
 	private Map<String, String> filterMap() {
 		 // 设置访问路径
-	    Map<String, String> filterRuleMap = new HashMap<>();
+	    Map<String, String> filterRuleMap = new LinkedHashMap<String, String>();
 	    filterRuleMap.put("/test/**", "anon");
-	    filterRuleMap.put("/redis/applogin", "anon"); // app登陆
 	    filterRuleMap.put("/unauthorized/**", "anon");
-	    filterRuleMap.put("/redis/app/**", "roles[app]");
+	    filterRuleMap.put("/shiro/redis/applogin", "anon"); // app登陆
+	    filterRuleMap.put("/shiro/redis/**", "roles[app]");
 		// 其余接口一律拦截
 		// 主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
 		filterRuleMap.put("/**", "authc");

@@ -15,7 +15,7 @@ import com.xfrj.core.utils.ValidateUtil;
 import com.xfrj.user.model.UserEntity;
 
 @RestController
-@RequestMapping("/token")
+@RequestMapping("/shiro/token")
 public class TokenDemoController extends BaseController {
 
 	/**

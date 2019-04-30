@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * 自定义异常错误界面
  */
-@Component
+//@Component
 public class CustomErrorPageRegistrar implements ErrorPageRegistrar {
 
 	@Override

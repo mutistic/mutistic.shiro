@@ -15,7 +15,7 @@ import com.xfrj.core.utils.ValidateUtil;
 import com.xfrj.user.model.UserEntity;
 
 @RestController
-@RequestMapping("/redis")
+@RequestMapping("/shiro/redis")
 public class RedisDemoController extends BaseController {
 
 	/**

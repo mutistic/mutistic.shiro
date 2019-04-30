@@ -8,7 +8,6 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 // 
 // https://www.cnblogs.com/HowieYuan/p/9259638.html
@@ -57,7 +56,7 @@ public class ShiroDefaultConfiguration {
 	 */
 	private Map<String, String> filterMap() {
 		// 设置拦截器
-		Map<String, String> filterRuleMap = new LinkedHashMap<>();
+		Map<String, String> filterRuleMap = new LinkedHashMap<String, String>();
 		// 无权限接口
 		// 访问 /unauthorized/**
 		filterRuleMap.put("/unauthorized/**", "anon");
