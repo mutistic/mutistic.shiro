@@ -23,6 +23,10 @@ public class RedisStringCache {
 		return opsForValue.multiGet(keys);
 	}
 
+	public Long increment(String key) {
+		return opsForValue.increment(key);
+	}
+	
 	public Boolean delete(String key) {
 		return opsForValue.getOperations().delete(key);
 	}

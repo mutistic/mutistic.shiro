@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xfrj.core.utils.ValidateUtil;
 import com.xfrj.user.mapper.UserEntityMapper;
 import com.xfrj.user.model.UserEntity;
 import com.xfrj.user.model.UserEntityExample;
@@ -34,6 +35,21 @@ public class LoginServiceImpl implements ILoginService {
 			return null;
 		}
 		return list.get(0);
+	}
+
+	@Override
+	public UserEntity register(UserEntity entity) {
+		UserEntity user = queryUser(entity.getUsername());
+		if(user != null) {
+			ValidateUtil.exception(entity.getUsername() +"用户已存在！不能重复注册！");
+		}
+		
+		entity.setId(System.currentTimeMillis());
+		int result = userEntityMapper.insert(entity);
+		if(result <= 0) {
+			ValidateUtil.exception(entity.getUsername() +"用户注册失败！");
+		}
+		return entity;
 	}
 
 }

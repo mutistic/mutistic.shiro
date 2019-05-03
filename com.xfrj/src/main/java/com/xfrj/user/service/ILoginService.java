@@ -8,4 +8,6 @@ public interface ILoginService {
 
 	UserEntity queryUser(String username);
 
+	UserEntity register(UserEntity entity);
+
 }

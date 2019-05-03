@@ -14,15 +14,19 @@ public class TokenUtil {
 
 	/** token head */
 	public final static String TOKEN_HEAD = "token";
-	/** token前缀 */
+	/** token key */
 	public final static String TOKEN_PREFIX = "S:mutistic:TOKEN_KEY:";
+	/** 错误登录次数 key*/
+	public final static String ERROR_LOGIN_NUM_PREFIX = "S:mutistic:ERROR_LOGIN_NUM:";
 	/** token盐值 */
 	public final static String TOKEN_SALT = "#&#";
 	/**
-	 * 过期时间(毫秒) <br/>
+	 * token过期时间(毫秒) <br/>
 	 * 默认：7*24*60*60 = 604800
 	 */
-	public final static Long EXPIRATION_TIME = 7 * 24 * 60 * 60l;
+	public final static Long TOKEN_EXPIRATION_TIME = 7 * 24 * 60 * 60l;
+	/** 错误登录次数 过期时间(毫秒) */
+	public final static Long LOGIN_NUM_EXP_TIME = 24 * 60 * 60l;
 
 	/**
 	 * token加密
@@ -73,19 +77,42 @@ public class TokenUtil {
 		token.setPassword(user.getPassword().toCharArray());
 		return token;
 	}
+	
+	public static String tokenKey(String token) {
+		return TOKEN_PREFIX + token;
+	}
+	
+	public static String errorLoginNumKey(Long id) {
+		return ERROR_LOGIN_NUM_PREFIX + id;
+	}
 
 	public static UserDto getTokenInfo(String token) {
-		return (UserDto) RedisUtil.opsForValue.get(TOKEN_PREFIX + token);
+		return (UserDto) RedisUtil.opsForValue.get(tokenKey(token));
 	}
 	
 	public static void setTokenInfo(UserDto dto) {
-		RedisUtil.opsForValue.set(TOKEN_PREFIX + dto.getToken(), dto, EXPIRATION_TIME);
+		RedisUtil.opsForValue.set(tokenKey(dto.getToken()), dto, TOKEN_EXPIRATION_TIME);
 	}
-
+	
 	public static void deleteTokenInfo(String token) {
-		RedisUtil.opsForValue.delete(TOKEN_PREFIX + token);
+		RedisUtil.opsForValue.delete(tokenKey(token));
 	}
 
+	public static Integer getLoginNum(Long id) {
+		Integer num = (Integer) RedisUtil.opsForValue.get(errorLoginNumKey(id));
+		return num == null ? 0 : num;
+	}
+	
+	public static Integer setLoginNum(Long id) {
+		Integer num = getLoginNum(id) + 1;
+		RedisUtil.opsForValue.set(errorLoginNumKey(id), num, LOGIN_NUM_EXP_TIME);
+		return num;
+	}
+	
+	public static void deleteLoginNum(Long id) {
+		RedisUtil.opsForValue.delete(errorLoginNumKey(id));
+	}
+	
 	public static void notNull(Object obj, String string) {
 		if(obj == null) {
 			exception(string);

@@ -1,7 +1,6 @@
 package com.xfrj.login.shiro;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -80,6 +79,7 @@ public class ShiroLoginConfiguration {
 		ruleMap.put("/sys/**", "sysFilter"); // web其他访问路径需要经过session
 		// 移动端
 		ruleMap.put("/app/login", FilterChainEnum.ANON.getValue()); // app登陆
+		ruleMap.put("/app/register", FilterChainEnum.ANON.getValue()); // app注册
 		ruleMap.put("/app/**", "tokenFilter"); // app其他路径访问需要经过token
 		
 		ruleMap.put("/**", FilterChainEnum.AUTHC.getValue()); // 其他接口一律需要登录

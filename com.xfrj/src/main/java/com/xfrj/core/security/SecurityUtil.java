@@ -71,11 +71,7 @@ public class SecurityUtil {
 	
 	public static void main(String[] args) {
 		try {
-			String token = 1082084516416118786l + "###" +System.currentTimeMillis();
-			System.out.println(token);
-			String ec = encryptDES(token);
-			System.out.println(ec);
-			System.out.println(decryptDES(ec));
+			System.out.println(SecurityUtil.encryptPassword("222"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

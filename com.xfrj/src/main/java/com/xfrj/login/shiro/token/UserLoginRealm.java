@@ -58,8 +58,15 @@ public class UserLoginRealm extends AuthorizingRealm {
         if (null == user) {
             throw new AccountException("用户名不正确");
         } 
+        
+        Integer loginNum = TokenUtil.getLoginNum(user.getId());
+        if(loginNum >= 5) {
+        	throw new AccountException("密码输入错误次数已达上限，请修改密码后重新登陆！");
+        }
+        
         if (!user.getPassword().equals(DataConverUtil.char2String(token.getCredentials()))) {
-            throw new AccountException("密码不正确");
+        	loginNum = TokenUtil.setLoginNum(user.getId());
+        	throw new AccountException("密码不正确，剩余重试次数："+ (5 - loginNum));
         }
         
         return new SimpleAuthenticationInfo(getSession(user), user.getPassword(), getName());
@@ -71,7 +78,7 @@ public class UserLoginRealm extends AuthorizingRealm {
     	dto.setUsername(user.getUsername());
     	dto.setPassword(user.getPassword());
     	dto.setLastLoginTime(System.currentTimeMillis());
-    	dto.setExpirationTime(dto.getLastLoginTime() + TokenUtil.EXPIRATION_TIME * 1000);
+    	dto.setExpirationTime(dto.getLastLoginTime() + TokenUtil.TOKEN_EXPIRATION_TIME * 1000);
     	dto.setToken(TokenUtil.encryptToken(dto.getId().toString(), dto.getExpirationTime()));
     	return dto;
     }
