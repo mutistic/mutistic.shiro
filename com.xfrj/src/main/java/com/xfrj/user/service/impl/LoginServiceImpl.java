@@ -28,7 +28,7 @@ public class LoginServiceImpl implements ILoginService {
 	public UserEntity queryUser(String username) {
 		UserEntityExample example = new UserEntityExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andUserNameEqualTo(username);
+		criteria.andUsernameEqualTo(username);
 		
 		List<UserEntity> list = userEntityMapper.selectByExample(example);
 		if(list == null || list.isEmpty()) {
@@ -37,6 +37,20 @@ public class LoginServiceImpl implements ILoginService {
 		return list.get(0);
 	}
 
+	@Override
+	public UserEntity queryUser(String username, Integer authorType) {
+		UserEntityExample example = new UserEntityExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUsernameEqualTo(username);
+		criteria.andAuthorTypeEqualTo(authorType);
+		
+		List<UserEntity> list = userEntityMapper.selectByExample(example);
+		if(list == null || list.isEmpty()) {
+			return null;
+		}
+		return list.get(0);
+	}
+	
 	@Override
 	public UserEntity register(UserEntity entity) {
 		UserEntity user = queryUser(entity.getUsername());

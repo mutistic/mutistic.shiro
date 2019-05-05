@@ -7,6 +7,8 @@ public class UserEntity {
 
     private String password;
 
+    private Integer authorType;
+
     public Long getId() {
         return id;
     }
@@ -15,20 +17,27 @@ public class UserEntity {
         this.id = id;
     }
 
-
     public String getUsername() {
-		return username;
-	}
+        return username;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setUsername(String username) {
+        this.username = username == null ? null : username.trim();
+    }
 
-	public String getPassword() {
+    public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
+    }
+
+    public Integer getAuthorType() {
+        return authorType;
+    }
+
+    public void setAuthorType(Integer authorType) {
+        this.authorType = authorType;
     }
 }

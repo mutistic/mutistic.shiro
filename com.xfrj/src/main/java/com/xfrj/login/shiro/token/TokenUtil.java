@@ -16,17 +16,14 @@ public class TokenUtil {
 	public final static String TOKEN_HEAD = "token";
 	/** token key */
 	public final static String TOKEN_PREFIX = "S:mutistic:TOKEN_KEY:";
-	/** 错误登录次数 key*/
-	public final static String ERROR_LOGIN_NUM_PREFIX = "S:mutistic:ERROR_LOGIN_NUM:";
 	/** token盐值 */
 	public final static String TOKEN_SALT = "#&#";
-	/**
-	 * token过期时间(毫秒) <br/>
-	 * 默认：7*24*60*60 = 604800
-	 */
+	/** token过期时间(秒) <br/> 默认：7*24*60*60 = 604800  */
 	public final static Long TOKEN_EXPIRATION_TIME = 7 * 24 * 60 * 60l;
-	/** 错误登录次数 过期时间(毫秒) */
-	public final static Long LOGIN_NUM_EXP_TIME = 24 * 60 * 60l;
+	/** 错误登录次数 key*/
+	public final static String ERROR_LOGIN_NUM_PREFIX = "S:mutistic:ERROR_LOGIN_NUM:";
+	/** 错误登录次数 过期时间(秒) */
+	public final static Long ERROR_LOGIN_NUM_EXP_TIME = 24 * 60 * 60l;
 
 	/**
 	 * token加密
@@ -105,7 +102,7 @@ public class TokenUtil {
 	
 	public static Integer setLoginNum(Long id) {
 		Integer num = getLoginNum(id) + 1;
-		RedisUtil.opsForValue.set(errorLoginNumKey(id), num, LOGIN_NUM_EXP_TIME);
+		RedisUtil.opsForValue.set(errorLoginNumKey(id), num, ERROR_LOGIN_NUM_EXP_TIME);
 		return num;
 	}
 	

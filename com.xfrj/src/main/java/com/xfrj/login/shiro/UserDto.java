@@ -7,9 +7,16 @@ public class UserDto implements Serializable {
 	private Long id;
 	private String username;
 	private String password;
+	private Integer authorType;
 	private String token;
 	private Long lastLoginTime;
 	private Long expirationTime;
+	public Integer getAuthorType() {
+		return authorType;
+	}
+	public void setAuthorType(Integer authorType) {
+		this.authorType = authorType;
+	}
 	public Long getLastLoginTime() {
 		return lastLoginTime;
 	}

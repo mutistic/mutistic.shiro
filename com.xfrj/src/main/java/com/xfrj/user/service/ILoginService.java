@@ -10,4 +10,6 @@ public interface ILoginService {
 
 	UserEntity register(UserEntity entity);
 
+	UserEntity queryUser(String username, Integer authorType);
+
 }

@@ -17,7 +17,7 @@
 			userId="root" password="root">
 		</jdbcConnection>
 		
-		<javaTypeResolver>
+		<javaTypeResolver type="com.xfrj.core.generator.MyJavaTypeResolver">
 			<property name="forceBigDecimals" value="false" />
 		</javaTypeResolver>
 
@@ -39,7 +39,9 @@
 		<!-- <table tableName="t_user" domainObjectName="UserEntity" enableCountByExample="false" 
 			enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
 			selectByExampleQueryId="false"/> -->
-		<table tableName="t_user" domainObjectName="UserEntity" />
+		<table tableName="t_user" domainObjectName="UserEntity">
+			
+		</table>
 
 	</context>
 </generatorConfiguration>

@@ -1,16 +1,11 @@
 package com.xfrj.core.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.ModelMap;
 
 import com.xfrj.core.utils.ResponseUtil;
 
 public class BaseController {
-	
-	
-	private static final Logger log = LoggerFactory.getLogger(BaseController.class);
 
 	public ModelMap success(Object data) {
 		return ResponseUtil.success(data);

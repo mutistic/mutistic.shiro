@@ -64,7 +64,7 @@ public class ShiroLoginConfiguration {
 		
 		// 访问路径权限过滤器Map
 		Map<String, Filter> filterMap = new LinkedHashMap<String, Filter>(); 
-		filterMap.put("sysFilter", new TokenLoginFilter()); // web访问过滤器 TODO
+//		filterMap.put("sysFilter", new TokenLoginFilter()); // web访问过滤器 TODO
 		filterMap.put("tokenFilter", new TokenLoginFilter()); // app访问过滤器
 		factoryBean.setFilters(filterMap);
 		
@@ -74,12 +74,17 @@ public class ShiroLoginConfiguration {
 		ruleMap.put("/unauthorized/**", FilterChainEnum.ANON.getValue()); // 无权限
 		// 静态资源
 		ruleMap.put("/static/**", FilterChainEnum.ANON.getValue());
+		
+		// 注册
+		ruleMap.put("/regiest/**", FilterChainEnum.ANON.getValue()); // 注册
+		ruleMap.put("/sys/register", FilterChainEnum.ANON.getValue()); // web注册
+		ruleMap.put("/app/register", FilterChainEnum.ANON.getValue()); // app注册
+		
 		// web端
-		ruleMap.put("/syslogin", FilterChainEnum.ANON.getValue()); // web登陆
-		ruleMap.put("/sys/**", "sysFilter"); // web其他访问路径需要经过session
+		ruleMap.put("/sys/login", FilterChainEnum.ANON.getValue()); // web登陆
+		ruleMap.put("/sys/**", "roles[sys]"); // web其他访问路径需要经过session
 		// 移动端
 		ruleMap.put("/app/login", FilterChainEnum.ANON.getValue()); // app登陆
-		ruleMap.put("/app/register", FilterChainEnum.ANON.getValue()); // app注册
 		ruleMap.put("/app/**", "tokenFilter"); // app其他路径访问需要经过token
 		
 		ruleMap.put("/**", FilterChainEnum.AUTHC.getValue()); // 其他接口一律需要登录

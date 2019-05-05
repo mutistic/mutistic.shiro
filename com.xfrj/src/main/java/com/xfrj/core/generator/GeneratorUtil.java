@@ -12,7 +12,7 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 public class GeneratorUtil {
 
 	private final static String XML_FILE_URL = Thread.class.getResource("/")
-			+ "com/xfrj/base/generator/GeneratorConfig.xml";
+			+ "com/xfrj/core/generator/GeneratorConfig.xml";
 
 	public static void main(String[] args) throws Exception {
 		try {
@@ -26,6 +26,7 @@ public class GeneratorUtil {
 		} catch (Exception e) {
 			System.err.println("文件生成失败！");
 			e.printStackTrace();
+			return;
 		}
 		System.out.println("文件生成成功！");
 	}

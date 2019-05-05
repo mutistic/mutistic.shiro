@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.xfrj.core.controller.BaseController;
 
 @RestController
-@RequestMapping("/sys")
-public class SysController extends BaseController {
+@RequestMapping("/admin")
+public class AdminController extends BaseController {
 
 
 	@GetMapping("/getMessage")
