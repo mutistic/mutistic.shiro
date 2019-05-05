@@ -7,7 +7,6 @@ import java.util.Map;
  * 通用工具类
  */
 public class CommonUtil {
-	
 	public static boolean isEmpty(String str) {
 		return str == null || str.trim().length() == 0;
 	}

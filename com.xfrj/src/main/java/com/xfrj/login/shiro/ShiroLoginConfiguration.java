@@ -82,6 +82,7 @@ public class ShiroLoginConfiguration {
 		
 		// web端
 		ruleMap.put("/sys/login", FilterChainEnum.ANON.getValue()); // web登陆
+//		ruleMap.put("/sys/getMessage", FilterChainEnum.USER.getValue()); // web其他访问路径需要经过session
 		ruleMap.put("/sys/**", "roles[sys]"); // web其他访问路径需要经过session
 		// 移动端
 		ruleMap.put("/app/login", FilterChainEnum.ANON.getValue()); // app登陆
@@ -148,7 +149,8 @@ public class ShiroLoginConfiguration {
 		 * 1.2.1、如果使用 GenericJackson2JsonRedisSerializer/GenericFastJsonRedisSerializer 序列化模式时：
 		 * 在反序列化时，由于SimpleSession.attributes数据类型Map<Object,Object> 会导致反序列化失败， 故采用默认序列化：JdkSerializationRedisSerializer
 		 */
-		redisTemplate.setKeySerializer(new StringRedisSerializer()); // String序列化
+		// org.springframework.data.redis.serializer.StringRedisSerializer 在 rememberMe 功能中，会存在key无法转换问题
+		redisTemplate.setKeySerializer(new JdkSerializationRedisSerializer()); // 默认jdk序列化
 		redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer()); // 默认jdk序列化
 		redisTemplate.setHashKeySerializer(redisTemplate.getKeySerializer());
 		redisTemplate.setHashValueSerializer(redisTemplate.getValueSerializer());

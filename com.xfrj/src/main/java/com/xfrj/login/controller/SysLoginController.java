@@ -34,15 +34,17 @@ public class SysLoginController extends BaseController {
 	 * @return
 	 */
 	@PostMapping("/login")
-	public Object login(@RequestBody UserEntity entity) {
-		ValidateUtil.notNull(entity, "登录信息");
-		ValidateUtil.notNull(entity.getUsername(), "用户名");
-		ValidateUtil.notNull(entity.getPassword(), "密码");
+	public Object login(@RequestBody UserParams data) {
+		ValidateUtil.notNull(data, "登录信息");
+		ValidateUtil.notNull(data.getUsername(), "用户名");
+		ValidateUtil.notNull(data.getPassword(), "密码");
 
+		data.setPassword(SecurityUtil.encryptPassword(data.getPassword()));
 		Subject subject = SecurityUtils.getSubject();
 		// 根据token执行认证登陆
-		entity.setPassword(SecurityUtil.encryptPassword(entity.getPassword()));
-		subject.login(new UserToken(entity.getUsername(), entity.getPassword(), 1));
+		UserToken token = new UserToken(data.getUsername(), data.getPassword(), 1);
+		token.setRememberMe(data.getIsRememberme() ? true : false);
+		subject.login(token); 
 		
 		UserDto dto = (UserDto) subject.getPrincipal();
 		TokenUtil.notNull(dto, "用户名/密码错误，登录失败！");
@@ -79,6 +81,7 @@ public class SysLoginController extends BaseController {
 		entity.setPassword(SecurityUtil.encryptPassword(data.getPassword()));
 		entity.setAuthorType(1);
 		entity = loginService.register(entity);
+		RegiestUtil.deleteCode(data.getRegiestMobile());
 		
 		Subject subject = SecurityUtils.getSubject();
 		subject.login(new UserToken(entity.getUsername(), entity.getPassword(), entity.getAuthorType()));

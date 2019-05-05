@@ -54,6 +54,11 @@ public class RegiestUtil {
 		RedisUtil.opsForValue.set(regiestKey(mobile), code, REGIEST_CODE_EXP_TIME);
 	}
 	
+	public static void deleteCode(String mobile) {
+		RedisUtil.opsForValue.delete(regiestKey(mobile));
+		RedisUtil.opsForValue.delete(numberKey(mobile));
+	}
+	
 	public static Integer getNumber(String mobile) {
 		Integer num = (Integer) RedisUtil.opsForValue.get(numberKey(mobile));
 		return num == null ? 0 : num;
