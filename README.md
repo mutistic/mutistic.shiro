@@ -1,2 +1,2 @@
-# mutistic.project
-project
+# mutistic.shiro
+shiro
